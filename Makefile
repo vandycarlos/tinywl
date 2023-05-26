@@ -2,18 +2,15 @@ WAYLAND_PROTOCOLS=/usr/share/wayland-protocols
 
 all: tinywl
 
-tinywl: prep xdg-shell-protocol
-	go build -o build/bin/tinywl github.com/swaywm/go-wlroots/cmd/tinywl
+tinywl: xdg-shell-protocol
+	go build -o tinywl github.com/swaywm/go-wlroots/cmd/tinywl
 
 xdg-shell-protocol:
-	wayland-scanner private-code $(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml wlroots/xdg-shell-protocol.c
-	wayland-scanner server-header $(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml wlroots/xdg-shell-protocol.h
-
-prep:
-	mkdir -p build/bin
+	wayland-scanner private-code $(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml xdg-shell-protocol.c
+	wayland-scanner server-header $(WAYLAND_PROTOCOLS)/stable/xdg-shell/xdg-shell.xml xdg-shell-protocol.h
 
 clean:
-	rm -rf build wlroots/xdg-shell-protocol.c wlroots/xdg-shell-protocol.h
+	rm -rf xdg-shell-protocol.c xdg-shell-protocol.h
 
 run: tinywl
-	./build/bin/tinywl
+	./tinywl
